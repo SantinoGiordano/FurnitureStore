@@ -42,9 +42,8 @@ furnitureItems := []Furniture{
 
 func main() {
 	router := gin.Default()
-	router.GET("/furniture", getFurniture)
-
 	router.Get("/api/furniture", getFurniture)
+
 	// app.Post("/api/todos", createTodo)
 	// app.Patch("/api/todos/:id", updateTodo)
 	// app.Delete("/api/todos/:id", getFurniture)
