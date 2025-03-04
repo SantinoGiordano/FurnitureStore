@@ -17,7 +17,7 @@ type Furniture struct {
 	Sale		int64   `json:"sale"`
 }
 
-furnitureItems := []Furniture{
+var furnitureItems = []Furniture{
 	{"1", "Modern Sofa", "This sofa offers a sleek and contemporary design with plush cushioning. Perfect for any modern living room, providing both comfort and style.", 599.99, 4, true, "https://placehold.co/100x100", 15},
 	{"2", "Wooden Dining Table", "Crafted from solid oak, this dining table combines durability with elegance. Ideal for family gatherings, it provides ample space and a sophisticated look.", 799.49, 5, false, "https://placehold.co/100x100", 20},
 	{"3", "Ergonomic Office Chair", "Designed to provide ultimate comfort during long hours of sitting, this office chair features lumbar support and adjustable settings. A must-have for productivity and comfort.", 249.99, 3, true, "https://placehold.co/100x100", 10},
@@ -37,12 +37,12 @@ furnitureItems := []Furniture{
 	{"17", "Accent Chair", "Add a pop of color and style to any room with this modern accent chair. It features plush seating and a contemporary design that will elevate your living space.", 229.99, 3, false, "https://placehold.co/100x100", 19},
 	{"18", "Storage Bench", "This bench doubles as both seating and storage. Perfect for entryways or bedrooms, it provides a stylish place to sit while offering extra storage space for blankets or shoes.", 249.99, 4, true, "https://placehold.co/100x100", 6},
 	{"19", "Glass Display Cabinet", "This modern glass-door display cabinet allows you to showcase your prized possessions. Its sleek design and sturdy build make it an elegant addition to any living room or hallway.", 549.99, 2, false, "https://placehold.co/100x100", 24},
-	{"20", "Standing Desk", "This height-adjustable standing desk offers flexibility for a healthier work environment. Switch from sitting to standing with ease, making it perfect for home offices.", 699.99, 5, true, "https://placehold.co/100x100", 13}
+	{"20", "Standing Desk", "This height-adjustable standing desk offers flexibility for a healthier work environment. Switch from sitting to standing with ease, making it perfect for home offices.", 699.99, 5, true, "https://placehold.co/100x100", 13},
 }
 
 func main() {
 	router := gin.Default()
-	router.Get("/api/furniture", getFurniture)
+	router.GET("/api/furniture", getFurniture)
 
 	// app.Post("/api/todos", createTodo)
 	// app.Patch("/api/todos/:id", updateTodo)
