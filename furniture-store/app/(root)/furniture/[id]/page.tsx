@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
+import Image from 'next/image';
 
 interface Furniture {
   id: string;
@@ -34,8 +35,8 @@ export default function FurnitureDetail() {
     return <p className="text-center mt-10">Loading...</p>;
   }
 
-  function ratingSystem(item) {
-    let stars = [];
+  function ratingSystem(item: Furniture) {
+    const stars = [];
     let num = 0;
   
     while (num < item.rating) {
@@ -51,13 +52,18 @@ export default function FurnitureDetail() {
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-      <img src={item.image} alt={item.name} className="w-full h-60 object-cover rounded" />
-      <h1 className="text-3xl font-bold mt-4">{item.name}</h1>
+ <Image 
+        src={item.image} 
+        alt={item.name} 
+        width={600} // specify width
+        height={400} // specify height
+        className="object-cover rounded" 
+      />      <h1 className="text-3xl font-bold mt-4">{item.name}</h1>
       <p className="text-gray-600 mt-2">{item.description}</p>
       <p className="text-xl font-semibold mt-4">${item.price.toFixed(2)}</p>
       <span className={`text-md font-semibold ${item.inStock ? 'text-green-600' : 'text-red-600'}`}>
         {item.inStock ? 'In Stock' : 'Out of Stock'}
-        <p className="text-xl font-semibold mt-4"><div>{ratingSystem(item)}</div></p>
+        <p className="text-xl font-semibold mt-4">{ratingSystem(item)}</p>
       </span>
     </div>
   );
