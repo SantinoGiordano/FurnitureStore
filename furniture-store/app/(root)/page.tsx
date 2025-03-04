@@ -1,8 +1,20 @@
+'use client'
+
 import { useState, useEffect } from 'react';
 
+interface Furniture {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  rating: number;
+  inStock: boolean;
+  image: string;
+  sale: number;
+}
 export default function Home() {
 
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<Furniture[]>([]);
 
   useEffect(() => {
     async function fetchFurniture() {
