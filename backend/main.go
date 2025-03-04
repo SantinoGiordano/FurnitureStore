@@ -43,7 +43,7 @@ var furnitureItems = []Furniture{
 func main() {
 	router := gin.Default()
 	router.GET("/api/furniture", getFurniture)
-
+	router.GET("/api/furniture/:id", getFurnitureByID)
 	// app.Post("/api/todos", createTodo)
 	// app.Patch("/api/todos/:id", updateTodo)
 	// app.Delete("/api/todos/:id", getFurniture)
@@ -53,4 +53,16 @@ func main() {
 
 func getFurniture(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, furnitureItems)
+}
+
+func getFurnitureByID(c *gin.Context) {
+	id := c.Param("id")
+
+	for _, item := range furnitureItems {
+		if item.ID == id {
+			c.IndentedJSON(http.StatusOK, item)
+			return
+		}
+	}
+	c.JSON(http.StatusNotFound, gin.H{"message": "Furniture item not found"})
 }
