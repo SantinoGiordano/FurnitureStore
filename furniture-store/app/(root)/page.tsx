@@ -33,6 +33,16 @@ export default function Home() {
       <h1 className="text-3xl font-bold text-center mb-6">
         Furniture Collection
       </h1>
+      
+      <input
+        id="album-search"
+        className="input input-bordered input-lg w-full shadow-lg focus:ring focus:ring-blue-400"
+        type="text"
+        placeholder="Search for albums..."
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+      />
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {items.map((item) => (
           <div key={item.id} className="card bg-base-100 shadow-xl p-4">
