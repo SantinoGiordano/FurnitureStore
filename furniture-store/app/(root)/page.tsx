@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import SearchBar from "@/componets/searchBar";
+import SearchBar from "@/componets/SearchBar";
+
 
 interface Furniture {
   id: string;
@@ -18,12 +19,19 @@ interface Furniture {
 
 export default function Home() {
   const [items, setItems] = useState<Furniture[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchFurniture() {
-      const response = await fetch("http://localhost:8080/api/furniture");
-      const data = await response.json();
-      setItems(data);
+      try {
+        const response = await fetch("http://localhost:8080/api/furniture");
+        if (!response.ok) throw new Error("Failed to fetch data");
+        
+        const data = await response.json();
+        setItems(data);
+      } catch (err) {
+        setError("Unable to load furniture items. Please try again later.");
+      }
     }
 
     fetchFurniture();
@@ -35,46 +43,51 @@ export default function Home() {
         Furniture Collection
       </h1>
 
-    <SearchBar/>
+      <SearchBar />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {items.map((item) => (
-          <div key={item.id} className="card bg-base-100 shadow-xl p-4">
-            <figure>
-              <Image
-                src={item.image}
-                alt={item.name}
-                width={600}
-                height={400}
-                className="w-full h-40 object-cover rounded"
-              />
-            </figure>
-            <div className="card-body">
-              <h2 className="card-title">{item.name}</h2>
-              <p className="text-sm text-gray-500">{item.description}</p>
-              <div className="flex justify-between items-center mt-2">
-                <span className="text-lg font-semibold">
-                  ${item.price.toFixed(2)}
-                </span>
-                {/* Stock Status with Conditional Styling */}
-                <span
-                  className={`text-sm font-semibold ${
-                    item.inStock ? "text-green-600" : "text-red-600"
-                  }`}
+      {error ? (
+        <p className="text-center text-red-600">{error}</p>
+      ) : items.length === 0 ? (
+        <p className="text-center text-gray-500">No furniture available</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {items.map((item) => (
+            <div key={item.id} className="card bg-base-100 shadow-xl p-4">
+              <figure>
+                <Image
+                  src={item.image}
+                  alt={item.name}
+                  width={600}
+                  height={400}
+                  className="w-full h-40 object-cover rounded"
+                />
+              </figure>
+              <div className="card-body">
+                <h2 className="card-title">{item.name}</h2>
+                <p className="text-sm text-gray-500">{item.description}</p>
+                <div className="flex justify-between items-center mt-2">
+                  <span className="text-lg font-semibold">
+                    ${item.price.toFixed(2)}
+                  </span>
+                  <span
+                    className={`text-sm font-semibold ${
+                      item.inStock ? "text-green-600" : "text-red-600"
+                    }`}
+                  >
+                    {item.inStock ? "In Stock" : "Out of Stock"}
+                  </span>
+                </div>
+                <Link
+                  className="btn btn-primary w-full mt-4"
+                  href={`/furniture/${item.id}`}
                 >
-                  {item.inStock ? "In Stock" : "Out of Stock"}
-                </span>
+                  View Details
+                </Link>
               </div>
-              <Link
-                className="btn btn-primary w-full mt-4"
-                href={`/furniture/${item.id}`}
-              >
-                View Details
-              </Link>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
