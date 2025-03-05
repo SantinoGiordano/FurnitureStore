@@ -1,8 +1,21 @@
+import Link from "next/link";
 import React, { useState, useEffect } from "react";
 
-const SearchBar = () => {
+interface Furniture {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  rating: number;
+  inStock: boolean;
+  image: string;
+  sale: number;
+}
+
+export default function SearchBar(){
   const [input, setInput] = useState("");
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<Furniture[]>([]);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,7 +67,9 @@ const SearchBar = () => {
                 key={item.id}
                 className="px-4 py-3 text-gray-700 hover:bg-blue-500 hover:text-white cursor-pointer transition-all"
               >
-                
+                <Link href={`/furniture/${item.id}`}>
+                {item.name}
+                </Link>
               </li>
             ))
           ) : (
@@ -65,5 +80,3 @@ const SearchBar = () => {
     </div>
   );
 };
-
-export default SearchBar;
