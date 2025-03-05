@@ -2,29 +2,40 @@ import Link from "next/link";
 
 export default function NavBar() {
   return (
-    <nav className="bg-base-200 p-4 shadow-md">
-      <ul className="flex space-x-6">
-        <li>
-          <Link href="/" className="hover:text-primary">
-            Home
-          </Link>
-        </li>
-        <li>
-          <Link href="/about" className="hover:text-primary">
-            About
-          </Link>
-        </li>
-        <li>
-          <Link href="/distributors" className="hover:text-primary">
-            Distributors
-          </Link>
-        </li>
-        <li>
-          <Link href="/contact" className="hover:text-primary">
-            Contact
-          </Link>
-        </li>
-      </ul>
+    <nav className="bg-gray-800 p-4 shadow-md">
+      <div className="container mx-auto flex justify-between items-center">
+        <div className="text-white text-xl font-semibold">
+          {/* You can add your logo or brand name here */}
+          Fantastic Furniture
+        </div>
+        <ul className="m-5 flex space-x-6">
+          <li>
+            <Link href="/" className="text-white hover:text-indigo-500 transition-all duration-300">
+              Home
+            </Link>
+          </li>
+          <li>
+            <Link href="/about" className="text-white hover:text-indigo-500 transition-all duration-300">
+              About
+            </Link>
+          </li>
+          <li>
+            <Link href="/about" className="text-white hover:text-indigo-500 transition-all duration-300">
+              About
+            </Link>
+          </li>
+          <li>
+            <Link href="/distributors" className="text-white hover:text-indigo-500 transition-all duration-300">
+              Distributors
+            </Link>
+          </li>
+          <li>
+            <Link href="/contact" className="text-white hover:text-indigo-500 transition-all duration-300">
+              Contact
+            </Link>
+          </li>
+        </ul>
+      </div>
     </nav>
   );
 }
