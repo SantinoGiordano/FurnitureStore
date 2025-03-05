@@ -19,13 +19,13 @@ const SearchBar = () => {
         console.log("Fetched data:", json); // Debugging
 
         const filteredResults = json.filter((item) =>
-          item?.name?.toLowerCase().includes(input.toLowerCase()) // ✅ Fixed property name
+          item?.name?.toLowerCase().includes(input.toLowerCase())
         );
 
         setResults(filteredResults);
       } catch (error) {
         console.error("Error fetching data:", error);
-        setResults([]); // Ensure errors do not break UI
+        setResults([]); // Prevent UI crashes on error
       }
     };
 
@@ -34,32 +34,32 @@ const SearchBar = () => {
   }, [input]);
 
   return (
-    <div className="relative w-80">
+    <div className="relative w-full max-w-md mx-auto">
+      {/* Search Input */}
       <input
         id="item-search"
-        className="input input-bordered input-lg w-full shadow-lg focus:ring focus:ring-blue-400"
+        className="w-full p-3 pl-4 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all"
         type="text"
-        placeholder="Search for items..."
+        placeholder="🔍 Search for furniture..."
         value={input}
         onChange={(e) => setInput(e.target.value)}
       />
 
-      {input && results.length > 0 && (
-        <ul className="absolute left-0 right-0 mt-2 bg-white border border-gray-300 shadow-lg rounded-lg overflow-hidden z-50">
-          {results.map((item, index) => (
-            <li
-              key={item.id} // Prefer using `id` if available
-              className="px-4 py-2 hover:bg-blue-500 hover:text-white cursor-pointer transition-all"
-            >
-              {item.name} {/* ✅ Fixed property name */}
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {input && results.length === 0 && (
-        <ul className="absolute left-0 right-0 mt-2 bg-white border border-gray-300 shadow-lg rounded-lg overflow-hidden z-50">
-          <li className="px-4 py-2 text-gray-500">No results found</li>
+      {/* Search Results */}
+      {input && (
+        <ul className="absolute left-0 right-0 mt-2 bg-white border border-gray-200 shadow-lg rounded-lg overflow-hidden z-50 max-h-60 overflow-y-auto">
+          {results.length > 0 ? (
+            results.map((item) => (
+              <li
+                key={item.id}
+                className="px-4 py-3 text-gray-700 hover:bg-blue-500 hover:text-white cursor-pointer transition-all"
+              >
+                
+              </li>
+            ))
+          ) : (
+            <li className="px-4 py-3 text-gray-500">No results found</li>
+          )}
         </ul>
       )}
     </div>
