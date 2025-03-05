@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
+import RatingSystem from '@/componets/ratingSystem';
 
 interface Furniture {
   id: string;
@@ -34,22 +35,7 @@ export default function FurnitureDetail() {
   if (!item) {
     return <p className="text-center mt-10">Loading...</p>;
   }
-
-  function ratingSystem(item: Furniture) {
-    const stars = [];
-    let num = 0;
   
-    while (num < item.rating) {
-      stars.push(<span key={num}>⭐</span>); // Add a star for each iteration
-      num++;
-    }
-  
-    return stars; // Return the array of JSX elements
-  }
-  
-
-  
-
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
  <Image 
@@ -63,7 +49,7 @@ export default function FurnitureDetail() {
       <p className="text-xl font-semibold mt-4">${item.price.toFixed(2)}</p>
       <span className={`text-md font-semibold ${item.inStock ? 'text-green-600' : 'text-red-600'}`}>
         {item.inStock ? 'In Stock' : 'Out of Stock'}
-        <p className="text-xl font-semibold mt-4">{ratingSystem(item)}</p>
+        <div className="text-xl font-semibold mt-4"><RatingSystem rating={item.rating} /></div>
       </span>
     </div>
   );
