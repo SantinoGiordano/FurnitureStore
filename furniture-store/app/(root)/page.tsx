@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import SearchBar from "@/componets/SearchBar";
+import FavoriteSystem from "@/componets/favoriteSystem";
+
 
 
 interface Furniture {
@@ -78,12 +80,16 @@ export default function Home() {
                     {item.inStock ? "In Stock" : "Out of Stock"}
                   </span>
                 </div>
+                <span className="flex justify-between items-center mt-2">
                 <Link
                   className="btn btn-primary w-full mt-4"
                   href={`/furniture/${item.id}`}
                 >
                   View Details
                 </Link>
+
+                <FavoriteSystem key={item.id} item={item} />
+                </span>
               </div>
             </div>
           ))}
