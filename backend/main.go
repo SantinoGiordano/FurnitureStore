@@ -15,6 +15,7 @@ type Furniture struct {
 	InStock     bool    `json:"inStock"`
 	Image       string  `json:"image"`
 	Sale        int64   `json:"sale"`
+	Favorite    bool    `json:"favorite"`
 }
 
 var furnitureItems = []Furniture{
@@ -36,7 +37,7 @@ var furnitureItems = []Furniture{
 	{"16", "Convertible Sofa Bed", "This multi-functional sofa bed easily converts from a comfortable sofa to a full-size bed. Ideal for guest rooms or small apartments, it offers versatility and space-saving benefits.", 399.99, 2, true, "/convertiblesofabed.jpg", 0},
 	{"17", "Accent Chair", "Add a pop of color and style to any room with this modern accent chair. It features plush seating and a contemporary design that will elevate your living space.", 229.99, 3, false, "/accentChair.jpg", 0},
 	{"18", "Storage Bench", "This bench doubles as both seating and storage. Perfect for entryways or bedrooms, it provides a stylish place to sit while offering extra storage space for blankets or shoes.", 249.99, 4, true, "/storage bench.jpg", 0},
-	{"19", "Glass Display Cabinet", "This modern glass-door display cabinet allows you to showcase your prized possessions. Its sleek design and sturdy build make it an elegant addition to any living room or hallway.", 549.99, 2, false, "/glass display cabinet.jpg",15},
+	{"19", "Glass Display Cabinet", "This modern glass-door display cabinet allows you to showcase your prized possessions. Its sleek design and sturdy build make it an elegant addition to any living room or hallway.", 549.99, 2, false, "/glass display cabinet.jpg", 15},
 	{"20", "Standing Desk", "This height-adjustable standing desk offers flexibility for a healthier work environment. Switch from sitting to standing with ease, making it perfect for home offices.", 699.99, 5, true, "/standingdesk.jpg", 30},
 }
 
