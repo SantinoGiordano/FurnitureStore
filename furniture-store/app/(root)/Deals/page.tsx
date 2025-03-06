@@ -14,6 +14,7 @@ interface Furniture {
   inStock: boolean;
   image: string;
   sale: number;
+  favorite: boolean;
 }
 
 export default function Home() {
