@@ -1,30 +1,36 @@
-"use client";
-import React from "react";
+import React, { useState } from "react";
+
 interface Furniture {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  rating: number;
+  inStock: boolean;
+  image: string;
+  sale: number;
   favorite: boolean;
 }
-function changeHeart(item:Furniture){
-  if(item.favorite == false){
-    item.favorite = true
-    console.log("false >>> true")
-    // return <div>{ "❤️" }</div>
-  }
-  if(item.favorite == true){
-    item.favorite = false
-    console.log("true >>> false")
-  }
-}
 
-const Hearts = ({ favorite }: { favorite: boolean }) => {
-  return <div>{favorite ? "❤️" : "🤍"}</div>;
+const FurnitureSystem = ({ item }: { item: Furniture }) => {
+  const [furniture, setFurniture] = useState(item);
+
+  const changeHeart = () => {
+    setFurniture((prev) => ({
+      ...prev,
+      favorite: !prev.favorite, // Toggle the favorite value
+    }));
+    console.log(`${furniture.favorite ? "true" : "false"} >>> ${!furniture.favorite ? "true" : "false"}`);
+  };
+
+  return (
+    <div>
+      <div onClick={changeHeart}>
+        {furniture.favorite ? "❤️" : "🤍"}
+      </div>
+      {/* Add more item details here */}
+    </div>
+  );
 };
 
-const FavoriteSystem = ({ item }: { item: Furniture }) => {
-  return(
-  <div onClick={()=>changeHeart(item)} className="hover:cursor-pointer">
-    <Hearts favorite={item.favorite} />
-  </div>
-  ) 
-  
-};
-export default FavoriteSystem;
+export default FurnitureSystem;
