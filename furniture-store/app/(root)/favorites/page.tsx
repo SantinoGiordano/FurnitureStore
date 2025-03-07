@@ -52,32 +52,44 @@ export default function Home() {
     }
 
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {favoriteItems.map((item) => (
-          <div key={item.id} className="border rounded-lg p-4 shadow-md">
-            <Image
-              src={item.image}
-              alt={item.name}
-              width={200}
-              height={150}
-              className="rounded-md"
-            />
-            <h2 className="text-xl font-semibold mt-2">{item.name}</h2>
-            <p className="text-gray-700">{item.description}</p>
-            <div className="font-bold">
-              <p>{item.price}</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {favoriteItems.map((item) => (
+            <div key={item.id} className="card bg-base-100 shadow-xl p-4">
+              <figure>
+                <Image
+                  src={item.image}
+                  alt={item.name}
+                  width={600}
+                  height={400}
+                  className="w-full h-40 object-cover rounded"
+                />
+              </figure>
+              <div className="card-body">
+                <h2 className="card-title">{item.name}</h2>
+                <p className="text-sm text-gray-500">{item.description}</p>
+                <div className="flex justify-between items-center mt-2">
+                  <span className="text-lg font-semibold">${item.price.toFixed(2)}</span>
+                  <span
+                    className={`text-sm font-semibold ${
+                      item.inStock ? "text-green-600" : "text-red-600"
+                    }`}
+                  >
+                    {item.inStock ? "In Stock" : "Out of Stock"}
+                  </span>
+                </div>
+                <RatingSystem rating={item.rating} />
+                <div className="flex items-center justify-between mt-4">
+                  <Link className="btn btn-primary" href={`/furniture/${item.id}`}>
+                    View Details
+                  </Link>
+                  <FurnitureSystem item={item} />
+                </div>
+              </div>
             </div>
-            <RatingSystem rating={item.rating} />
-            <div className="flex items-center justify-between mt-4">
-              <Link className="btn btn-primary" href={`/furniture/${item.id}`}>
-                View Details
-              </Link>
-              <FurnitureSystem item={item} />
-            </div>
-          </div>
-        ))}
-      </div>
-    );
+          ))}
+        </div>
+      );
+      
   }
 
   if (loading) return <p className="text-center">Loading furniture...</p>;
