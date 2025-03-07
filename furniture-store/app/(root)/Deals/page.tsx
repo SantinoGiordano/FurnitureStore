@@ -41,13 +41,15 @@ export default function Home() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {saleItems.map((item) => (
           <div key={item.id} className="border rounded-lg p-4 shadow-md">
-            <Image
-              src={item.image}
-              alt={item.name}
-              width={200}
-              height={150}
-              className="rounded-md"
-            />
+            <figure>
+              <Image
+                src={item.image}
+                alt={item.name}
+                width={600}
+                height={400}
+                className="w-full h-40 object-cover rounded"
+              />
+            </figure>
             <h2 className="text-xl font-semibold mt-2 flex items-center">
               {item.name}{" "}
               <span className="text-red-400 ml-2">{item.sale}%</span>
@@ -60,10 +62,10 @@ export default function Home() {
               </span>
             </p>
             <RatingSystem rating={item.rating} />
-             <Link
-                className="btn btn-primary w-full mt-4"
-                href={`/furniture/${item.id}`}
-              >
+            <Link
+              className="btn btn-primary w-full mt-4"
+              href={`/furniture/${item.id}`}
+            >
               View Details
             </Link>
           </div>
