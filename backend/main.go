@@ -19,7 +19,7 @@ type Furniture struct {
 }
 
 var furnitureItems = []Furniture{
-	{"1", "Modern Sofa", "This sofa offers a sleek and contemporary design with plush cushioning. Perfect for any modern living room, providing both comfort and style.", 599.99, 4, true, "/ModernSofa.jpg", 0, false},
+	{"1", "Modern Sofa", "This sofa offers a sleek and contemporary design with plush cushioning. Perfect for any modern living room, providing both comfort and style.", 599.99, 4, true, "/ModernSofa.jpg", 0, true},
 	{"2", "Wooden Dining Table", "Crafted from solid oak, this dining table combines durability with elegance. Ideal for family gatherings, it provides ample space and a sophisticated look.", 799.49, 5, false, "/woodenTable.jpg", 0, false},
 	{"3", "Ergonomic Office Chair", "Designed to provide ultimate comfort during long hours of sitting, this office chair features lumbar support and adjustable settings. A must-have for productivity and comfort.", 249.99, 3, true, "/officeChair.jpg", 10, false},
 	{"4", "Queen Bed Frame", "A sturdy and stylish metal bed frame that complements any bedroom decor. Its modern design is perfect for supporting a queen-size mattress while offering a minimalist look.", 499.99, 5, false, "/queenBedFrame.jpg", 20, true},
