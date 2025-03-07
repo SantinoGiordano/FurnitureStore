@@ -20,13 +20,8 @@ export default function NavBar() {
             </Link>
           </li>
           <li>
-            <Link href="/about" className="text-white hover:text-indigo-500 transition-all duration-300">
-              About
-            </Link>
-          </li>
-          <li>
-            <Link href="/distributors" className="text-white hover:text-indigo-500 transition-all duration-300">
-              Distributors
+            <Link href="/favorites" className="text-white hover:text-indigo-500 transition-all duration-300">
+              Favorites
             </Link>
           </li>
           <li>
