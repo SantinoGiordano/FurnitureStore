@@ -25,10 +25,9 @@ const FurnitureSystem = ({ item }: { item: Furniture }) => {
 
   return (
     <div>
-      <div onClick={changeHeart}>
+      <div className="hover:cursor-pointer" onClick={changeHeart}>
         {furniture.favorite ? "❤️" : "🤍"}
       </div>
-      {/* Add more item details here */}
     </div>
   );
 };
