@@ -64,17 +64,16 @@ export default function Home() {
             />
             <h2 className="text-xl font-semibold mt-2">{item.name}</h2>
             <p className="text-gray-700">{item.description}</p>
-            <p className="font-bold">
+            <div className="font-bold">
               <p>{item.price}</p>
-            </p>
+            </div>
             <RatingSystem rating={item.rating} />
-            <Link
-              className="btn btn-primary w-full mt-4"
-              href={`/furniture/${item.id}`}
-            >
-              View Details
-            </Link>
-            <FurnitureSystem item={item} />
+            <div className="flex items-center justify-between mt-4">
+              <Link className="btn btn-primary" href={`/furniture/${item.id}`}>
+                View Details
+              </Link>
+              <FurnitureSystem item={item} />
+            </div>
           </div>
         ))}
       </div>
