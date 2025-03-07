@@ -34,6 +34,7 @@ export default function Home() {
         setItems(data);
       } catch (err) {
         setError("Unable to load furniture items. Please try again later.");
+        console.log(err)
       }
     }
 
