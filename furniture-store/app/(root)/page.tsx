@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import SearchBar from "@/componets/SearchBar";
 import FavoriteSystem from "@/componets/favoriteSystem";
+import RatingSystem from "@/componets/ratingSystem";
 
 
 
@@ -82,7 +83,10 @@ export default function Home() {
                 />
               </figure>
               <div className="card-body">
-                <h2 className="card-title">{item.name}</h2>
+                <span className="flex justify-between items-center mt-2">
+                  <h2 className="card-title">{item.name}</h2>
+                  <RatingSystem key={item.id} rating={item.rating} />
+                </span>
                 <p className="text-sm text-gray-500">{item.description}</p>
                 <hr/>
                 <hr/>
