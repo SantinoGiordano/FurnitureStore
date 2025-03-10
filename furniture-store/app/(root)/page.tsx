@@ -42,6 +42,20 @@ export default function Home() {
   }, []);
 
   return (
+
+    <div className="p-8">
+    {/* Parallax Hero Section */}
+    <div
+      className="w-full h-64 bg-fixed bg-cover bg-center relative"
+      style={{
+        backgroundImage: `url('livingRoom.webp')`, // Ensure the image is in the public folder
+      }}
+    >
+      <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+        <h1 className="text-4xl font-bold text-white">Elegant Living Spaces</h1>
+      </div>
+    </div>
+
     <div className="p-8">
       <h1 className="text-3xl font-bold text-center mb-6">
         Furniture Collection
@@ -96,6 +110,7 @@ export default function Home() {
           ))}
         </div>
       )}
+    </div>
     </div>
   );
 }
