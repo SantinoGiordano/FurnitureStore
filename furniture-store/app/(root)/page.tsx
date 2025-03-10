@@ -73,6 +73,7 @@ export default function Home() {
             <div key={item.id} className="card bg-base-100 shadow-xl p-4">
               <figure>
                 <Image
+                draggable = 'false'
                   src={item.image}
                   alt={item.name}
                   width={600}

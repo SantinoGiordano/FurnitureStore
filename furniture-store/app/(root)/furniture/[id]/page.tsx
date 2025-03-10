@@ -40,6 +40,7 @@ export default function FurnitureDetail() {
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
       <Image
+        draggable="false"
         src={item.image}
         alt={item.name}
         width={600} // specify width
