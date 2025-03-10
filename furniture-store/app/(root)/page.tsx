@@ -84,6 +84,9 @@ export default function Home() {
               <div className="card-body">
                 <h2 className="card-title">{item.name}</h2>
                 <p className="text-sm text-gray-500">{item.description}</p>
+                <hr/>
+                <hr/>
+                <hr/>
                 <div className="flex justify-between items-center mt-2">
                   <span className="text-lg font-semibold">
                     ${item.price.toFixed(2)}
@@ -96,6 +99,7 @@ export default function Home() {
                     {item.inStock ? "In Stock" : "Out of Stock"}
                   </span>
                 </div>
+                <hr/>
                 <span className="flex justify-between items-center mt-2">
                 <Link
                   className="btn btn-primary w-full mt-4"
