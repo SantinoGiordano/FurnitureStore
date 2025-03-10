@@ -57,7 +57,7 @@ export default function FurnitureDetail() {
       >
         {item.inStock ? "In Stock" : "Out of Stock"}
         <div className="text-xl font-semibold mt-4">
-          <RatingSystem rating={item.rating} />
+        <RatingSystem rating={item.rating} />
         </div>
       </span>
     </div>
