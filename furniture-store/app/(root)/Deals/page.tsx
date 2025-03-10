@@ -40,9 +40,10 @@ export default function Home() {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {saleItems.map((item) => (
-          <div key={item.id} className="border rounded-lg p-4 shadow-md">
+          <div key={item.id} className="card bg-base-100 shadow-xl p-4">
             <figure>
               <Image
+                draggable="false"
                 src={item.image}
                 alt={item.name}
                 width={600}
@@ -55,19 +56,25 @@ export default function Home() {
               <span className="text-red-400 ml-2">{item.sale}%</span>
             </h2>
             <p className="text-gray-700">{item.description}</p>
+            <hr />
+            <hr />
+            <hr />
             <p className="text-red-500 font-bold">
               Sale Price: ${(item.price - item.sale).toFixed(2)}
               <span className="text-gray-400 line-through ml-2">
                 ${item.price}
               </span>
             </p>
-            <RatingSystem rating={item.rating} />
-            <Link
-              className="btn btn-primary w-full mt-4"
-              href={`/furniture/${item.id}`}
-            >
-              View Details
-            </Link>
+            <hr/>
+            <span className="flex justify-between items-center mt-2">
+              <Link
+                className="btn btn-primary w-full mt-4"
+                href={`/furniture/${item.id}`}
+              >
+                View Details
+              </Link>
+              <RatingSystem rating={item.rating} />
+            </span>
           </div>
         ))}
       </div>
