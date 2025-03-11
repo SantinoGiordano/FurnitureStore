@@ -1,18 +1,12 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"log"
-	"net/http"
-	"os"
 
-	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
-	"go.mongodb.org/mongo-driver/bson"
+	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type Furniture struct {
@@ -32,12 +26,17 @@ var collection *mongo.Collection
 func main() {
 
 	fmt.Println("hello world")
+
+	app := fiber.New()
+
+	furniture := []Furniture{}
+
+	app.GET("/api/furniture", func(c *fiber.Ctx) error {
+		return c.Status(200).JSON(fiber.Map{"msg": "hello"})
+	})
+
+	log.Fatal(app.Listen(":8080"))
 }
-	
-
-
-
-
 
 // func getFurniture(c *gin.Context) {
 // 	var items []Furniture
@@ -65,4 +64,3 @@ func main() {
 
 // 	c.JSON(http.StatusOK, items)
 // }
-
