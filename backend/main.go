@@ -3,8 +3,10 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -26,13 +28,22 @@ var collection *mongo.Collection
 func main() {
 
 	fmt.Println("hello world")
-
 	app := fiber.New()
 
-	furniture := []Furniture{}
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatal("Error Laoding .env file:", err)
+	}
 
-	app.GET("/api/furniture", func(c *fiber.Ctx) error {
-		return c.Status(200).JSON(fiber.Map{"msg": "hello"})
+	MONGO_URI := os.Getenv("MONGO_URI")
+
+	furniture := []Furniture{
+		{Name: "Chair", Price: 100.0, Rating: 5, InStock: true, Sale: 10, Favorite: true},
+		{Name: "Table", Price: 200.0, Rating: 4, InStock: true, Sale: 5, Favorite: false},
+	}
+
+	app.Get("/api/furniture", func(c *fiber.Ctx) error {
+		return c.Status(200).JSON(furniture)
 	})
 
 	log.Fatal(app.Listen(":8080"))
