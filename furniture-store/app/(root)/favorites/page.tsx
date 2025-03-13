@@ -3,11 +3,10 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import FurnitureSystem from "@/componets/favoriteSystem";
 import RatingSystem from "@/componets/ratingSystem";
 import FavoriteSystem from "@/componets/favoriteSystem";
 
-interface Furniture {
+export interface Furniture {
   id: string;
   name: string;
   description: string;
