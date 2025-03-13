@@ -42,7 +42,7 @@ export default function Home() {
 
     fetchFurniture();
   }, []);
-
+  
   return (
 
     <div className="p-8">
@@ -75,8 +75,8 @@ export default function Home() {
             <div key={item._id} className="card bg-base-100 shadow-xl p-4">
               <figure>
                 <Image
-                draggable = 'false'
-                  src={item.image}
+                  draggable = 'false'
+                  src={item.image || "/placeholder.jpg"}
                   alt={item.name}
                   width={600}
                   height={400}
@@ -113,7 +113,7 @@ export default function Home() {
                   View Details
                 </Link>
 
-                <FavoriteSystem key={item.id} item={item.f} />
+                <FavoriteSystem key={item.id} item={item} />
                 </span>
               </div>
             </div>
