@@ -59,7 +59,7 @@ func main() {
 	app := fiber.New()
 
 	app.Get("/api/furniture", getFurniture)
-	// app.Post("/api/furniture/favorite", postFavorite)
+	app.Patch("/api/furniture/favorited/:id", patchFavorite)
 
 
 	port := os.Getenv("PORT")
@@ -92,6 +92,25 @@ func getFurniture(c *fiber.Ctx) error {
 	return c.JSON(furniture)
 }
 
-// func postFavorite(c *fiber.Ctx)error{
+func patchFavorite(c *fiber.Ctx) error {
+	id := c.Params("id") // Get the ID from the URL parameter
 
-// }
+	// Find the furniture item by ID
+	var furniture Furniture
+	err := collection.FindOne(context.TODO(), bson.M{"id": id}).Decode(&furniture)
+	if err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Furniture not found"})
+	}
+
+	// Toggle the favorite status
+	update := bson.M{"$set": bson.M{"favorite": !furniture.Favorite}}
+
+	// Update the document in MongoDB
+	_, err = collection.UpdateOne(context.TODO(), bson.M{"id": id}, update)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to update favorite status"})
+	}
+
+	// Return a success response
+	return c.JSON(fiber.Map{"message": "Favorite status updated", "favorite": !furniture.Favorite})
+}
