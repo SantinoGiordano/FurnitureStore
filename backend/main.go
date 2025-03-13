@@ -59,6 +59,7 @@ func main() {
 	app := fiber.New()
 
 	app.Get("/api/furniture", getFurniture)
+	// app.Post("/api/furniture/favorite", postFavorite)
 
 
 	port := os.Getenv("PORT")
@@ -90,3 +91,7 @@ func getFurniture(c *fiber.Ctx) error {
 	}
 	return c.JSON(furniture)
 }
+
+// func postFavorite(c *fiber.Ctx)error{
+
+// }
