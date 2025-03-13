@@ -1,18 +1,21 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type Furniture struct {
-	ID          primitive.ObjectID `json:"id,omitempty" bson:"_id,omitempty"`
+	ID          primitive.ObjectID `json:"_id,omitempty" bson:"_id, omitempty"`
 	Name        string             `json:"name"`
 	Description string             `json:"description"`
 	Price       float64            `json:"price"`
@@ -28,50 +31,62 @@ var collection *mongo.Collection
 func main() {
 
 	fmt.Println("hello world")
-	app := fiber.New()
 
 	err := godotenv.Load(".env")
 	if err != nil {
-		log.Fatal("Error Laoding .env file:", err)
+		log.Fatal("Error Loading .env file:", err)
 	}
 
 	MONGO_URI := os.Getenv("MONGO_URI")
-
-	furniture := []Furniture{
-		{Name: "Chair", Price: 100.0, Rating: 5, InStock: true, Sale: 10, Favorite: true},
-		{Name: "Table", Price: 200.0, Rating: 4, InStock: true, Sale: 5, Favorite: false},
+	clientOptions := options.Client().ApplyURI(MONGO_URI)
+	client, err := mongo.Connect(context.Background(), clientOptions)
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	app.Get("/api/furniture", func(c *fiber.Ctx) error {
-		return c.Status(200).JSON(furniture)
-	})
+	defer client.Disconnect(context.Background())
 
-	log.Fatal(app.Listen(":8080"))
+
+	err = client.Ping(context.Background(), nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Connected to Mongo")
+
+	collection = client.Database("golang_db").Collection("furniture")
+
+	app := fiber.New()
+
+	app.Get("/api/furniture", getFurniture)
+
+
+	port := os.Getenv("PORT")
+	if port == ""{
+		port = "8080"
+	}
+	log.Fatal(app.Listen("0.0.0.0:" + port))
 }
 
-// func getFurniture(c *gin.Context) {
-// 	var items []Furniture
+func getFurniture(c *fiber.Ctx) error {
+	var furniture []Furniture
 
-// 	cursor, err := collection.Find(context.Background(), bson.M{})
-// 	if err != nil {
-// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-// 		return
-// 	}
-// 	defer cursor.Close(context.Background())
+	cursor, err := collection.Find(context.Background(), bson.M{})
+	if err != nil {
+		return err
+	}
+	defer cursor.Close(context.Background())
 
-// 	for cursor.Next(context.Background()) {
-// 		var item Furniture
-// 		if err := cursor.Decode(&item); err != nil {
-// 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-// 			return
-// 		}
-// 		items = append(items, item)
-// 	}
+	for cursor.Next(context.Background()) {
+		var item Furniture
+		if err := cursor.Decode(&item); err != nil {
+			return err
+		}
 
-// 	if len(items) == 0 {
-// 		c.JSON(http.StatusNotFound, gin.H{"message": "No furniture found"})
-// 		return
-// 	}
-
-// 	c.JSON(http.StatusOK, items)
-// }
+		furniture = append(furniture, item)
+	}
+	if err := cursor.Err(); err != nil {
+		return err
+	}
+	return c.JSON(furniture)
+}
