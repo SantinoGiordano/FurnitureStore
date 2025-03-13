@@ -10,6 +10,7 @@ import RatingSystem from "@/componets/ratingSystem";
 
 
 interface Furniture {
+  _id:string;
   id: string;
   name: string;
   description: string;
@@ -71,7 +72,7 @@ export default function Home() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {items.map((item) => (
-            <div key={item.id} className="card bg-base-100 shadow-xl p-4">
+            <div key={item._id} className="card bg-base-100 shadow-xl p-4">
               <figure>
                 <Image
                 draggable = 'false'
@@ -112,7 +113,7 @@ export default function Home() {
                   View Details
                 </Link>
 
-                <FavoriteSystem key={item.id} item={item} />
+                <FavoriteSystem key={item.id} item={item.f} />
                 </span>
               </div>
             </div>
