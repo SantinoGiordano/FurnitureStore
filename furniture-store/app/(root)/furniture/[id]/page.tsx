@@ -6,7 +6,8 @@ import Image from "next/image";
 import RatingSystem from "@/componets/ratingSystem";
 
 interface Furniture {
-  id: string;
+  __id:string;
+  _id: string;
   name: string;
   description: string;
   price: number;
@@ -18,20 +19,20 @@ interface Furniture {
 }
 
 export default function FurnitureDetail() {
-  const { id } = useParams(); // Get the dynamic ID from URL
+  const { _id } = useParams();
   const [item, setItem] = useState<Furniture | null>(null);
 
   useEffect(() => {
     async function fetchFurnitureItem() {
-      const response = await fetch(`http://localhost:8080/api/furniture/${id}`);
+      const response = await fetch(`http://localhost:8080/api/furniture/${_id}`);
       const data = await response.json();
       setItem(data);
     }
 
-    if (id) {
+    if (_id) {
       fetchFurnitureItem();
     }
-  }, [id]);
+  }, [_id]);
 
   if (!item) {
     return <p className="text-center mt-10">Loading...</p>;
@@ -43,7 +44,7 @@ export default function FurnitureDetail() {
         draggable="false"
         src={item.image}
         alt={item.name}
-        width={600} // specify width
+        width={600} // specify w_idth
         height={400} // specify height
         className="object-cover rounded"
       />{" "}
