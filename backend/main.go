@@ -15,7 +15,7 @@ import (
 )
 
 type Furniture struct {
-	ID          primitive.ObjectID `json:"_id,omitempty" bson:"_id, omitempty"`
+	ID primitive.ObjectID `json:"_id,omitempty" bson:"_id, omitempty"`
 	Name        string             `json:"name"`
 	Description string             `json:"description"`
 	Price       float64            `json:"price"`
@@ -27,16 +27,18 @@ type Furniture struct {
 }
 
 var collection *mongo.Collection
+// var db *mongo.Database
 
 func main() {
 
 	fmt.Println("hello world")
 
+	// Load environment variables from env file
 	err := godotenv.Load(".env")
 	if err != nil {
 		log.Fatal("Error Loading .env file:", err)
 	}
-
+	// Connetion code to mongo
 	MONGO_URI := os.Getenv("MONGO_URI")
 	clientOptions := options.Client().ApplyURI(MONGO_URI)
 	client, err := mongo.Connect(context.Background(), clientOptions)
@@ -54,6 +56,7 @@ func main() {
 
 	fmt.Println("Connected to Mongo")
 
+	// Initialize collection
 	collection = client.Database("golang_db").Collection("furniture")
 
 	app := fiber.New()
@@ -92,25 +95,35 @@ func getFurniture(c *fiber.Ctx) error {
 	return c.JSON(furniture)
 }
 
+
 func patchFavorite(c *fiber.Ctx) error {
-	id := c.Params("id") // Get the ID from the URL parameter
+	id := c.Params("id")
 
-	// Find the furniture item by ID
-	var furniture Furniture
-	err := collection.FindOne(context.TODO(), bson.M{"id": id}).Decode(&furniture)
+	// ✅ Convert id to ObjectID
+	objectID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Furniture not found"})
+		return c.Status(fiber.StatusBadRequest).SendString("Invalid ID format")
 	}
 
-	// Toggle the favorite status
-	update := bson.M{"$set": bson.M{"favorite": !furniture.Favorite}}
-
-	// Update the document in MongoDB
-	_, err = collection.UpdateOne(context.TODO(), bson.M{"id": id}, update)
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to update favorite status"})
+	// ✅ Read request body to get favorite value from frontend
+	var body struct {
+		Favorite bool `json:"favorite"`
 	}
 
-	// Return a success response
-	return c.JSON(fiber.Map{"message": "Favorite status updated", "favorite": !furniture.Favorite})
+	if err := c.BodyParser(&body); err != nil {
+		return c.Status(fiber.StatusBadRequest).SendString("Invalid request body")
+	}
+
+	// ✅ Update the favorite field in MongoDB
+	_, err = collection.UpdateOne(
+		c.Context(),
+		bson.M{"_id": objectID},
+		bson.M{"$set": bson.M{"favorite": body.Favorite}}, // Use the value sent from the frontend
+	)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString("Failed to update item")
+	}
+
+	// ✅ Return updated response
+	return c.JSON(fiber.Map{"_id": id, "favorite": body.Favorite})
 }
