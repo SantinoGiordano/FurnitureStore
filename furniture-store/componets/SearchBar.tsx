@@ -2,6 +2,7 @@ import Link from "next/link";
 import React, { useState, useEffect } from "react";
 
 interface Furniture {
+  _id:string;
   id: string;
   name: string;
   description: string;
@@ -31,7 +32,7 @@ export default function SearchBar(){
         const json = await response.json();
         console.log("Fetched data:", json); // Debugging
 
-        const filteredResults = json.filter((item) =>
+        const filteredResults = json.filter((item : Furniture) =>
           item?.name?.toLowerCase().includes(input.toLowerCase())
         );
 
@@ -67,7 +68,7 @@ export default function SearchBar(){
                 key={item.id}
                 className="px-4 py-3 text-gray-700 hover:bg-blue-500 hover:text-white cursor-pointer transition-all"
               >
-                <Link href={`/furniture/${item.id}`}>
+                <Link href={`/furniture/${item._id}`}>
                 {item.name}
                 </Link>
               </li>
