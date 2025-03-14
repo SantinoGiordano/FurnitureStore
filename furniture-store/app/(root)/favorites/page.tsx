@@ -95,7 +95,7 @@ export default function Home() {
                   View Details
                 </Link>
 
-                <FavoriteSystem key={item.id} item={item} />
+                <FavoriteSystem key={item.id} item={undefined} />
               </span>
             </div>
           </div>
