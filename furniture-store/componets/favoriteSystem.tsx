@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 export interface Furniture {
-  id: string;
+  _id: string; // ✅ Changed id to _id
   name: string;
   description: string;
   price: number;
@@ -17,23 +17,25 @@ export default function FurnitureSystem({ item }: { item: Furniture }) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setFavorite(item.favorite); // Sync with backend changes
+    setFavorite(item.favorite); // ✅ Sync with backend changes
   }, [item.favorite]);
 
   const toggleFavorite = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:8080/api/furniture/favorited/${item.id}`, {
+      const response = await fetch(`http://localhost:8080/api/furniture/favorited/${item._id}`, {
+        mode: 'cors',
+        credentials: 'include',
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ favorite: !favorite }), // Send the toggled value
+        body: JSON.stringify({ favorite: !favorite }), // ✅ Send new favorite value
       });
 
       if (!response.ok) throw new Error("Failed to update favorite status.");
 
-      setFavorite((prev) => !prev); // Update UI after a successful backend update
+      setFavorite((prev) => !prev); // ✅ Update UI
     } catch (error) {
       console.error("Error updating favorite status:", error);
     } finally {
