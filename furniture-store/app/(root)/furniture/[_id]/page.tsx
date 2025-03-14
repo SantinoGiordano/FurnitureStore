@@ -47,7 +47,7 @@ export default function FurnitureDetail() {
         width={600} // specify w_idth
         height={400} // specify height
         className="object-cover rounded"
-      />{" "}
+      />
       <h1 className="text-3xl font-bold mt-4">{item.name}</h1>
       <p className="text-gray-600 mt-2">{item.description}</p>
       <p className="text-xl font-semibold mt-4">${item.price.toFixed(2)}</p>
