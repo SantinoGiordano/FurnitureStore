@@ -46,11 +46,10 @@ export default function Home() {
   return (
 
     <div className="p-8">
-    {/* Parallax Hero Section */}
     <div
       className="w-full h-64 bg-fixed bg-cover bg-center relative"
       style={{
-        backgroundImage: `url('livingRoom.webp')`, // Ensure the image is in the public folder
+        backgroundImage: `url('livingRoom.webp')`, 
       }}
     >
       <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
@@ -108,7 +107,7 @@ export default function Home() {
                 <span className="flex justify-between items-center mt-2">
                 <Link
                   className="btn btn-primary w-full mt-4"
-                  href={`/furniture/${item.id}`}
+                  href={`/furniture/${item._id}`}
                 >
                   View Details
                 </Link>
