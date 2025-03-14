@@ -73,7 +73,7 @@ export default function Home() {
           {items.map((item) => (
             <div key={item._id} className="card bg-base-100 shadow-xl p-4">
               <figure>
-                <Image
+                <Image 
                   draggable = 'false'
                   src={item.image || "/placeholder.jpg"}
                   alt={item.name}
