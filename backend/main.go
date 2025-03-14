@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -15,7 +16,7 @@ import (
 )
 
 type Furniture struct {
-	ID primitive.ObjectID `json:"_id,omitempty" bson:"_id, omitempty"`
+	ID          primitive.ObjectID `json:"_id,omitempty" bson:"_id, omitempty"`
 	Name        string             `json:"name"`
 	Description string             `json:"description"`
 	Price       float64            `json:"price"`
@@ -27,7 +28,7 @@ type Furniture struct {
 }
 
 var collection *mongo.Collection
-// var db *mongo.Database
+
 
 func main() {
 
@@ -48,7 +49,6 @@ func main() {
 
 	defer client.Disconnect(context.Background())
 
-
 	err = client.Ping(context.Background(), nil)
 	if err != nil {
 		log.Fatal(err)
@@ -60,13 +60,18 @@ func main() {
 	collection = client.Database("golang_db").Collection("furniture")
 
 	app := fiber.New()
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "*",
+		AllowMethods: "GET,POST,PATCH,DELETE",
+		AllowHeaders: "Content-Type",
+	}))
 
 	app.Get("/api/furniture", getFurniture)
+	app.Get("/api/furniture/:id", getFurnitureSingle)
 	app.Patch("/api/furniture/favorited/:id", patchFavorite)
 
-
 	port := os.Getenv("PORT")
-	if port == ""{
+	if port == "" {
 		port = "8080"
 	}
 	log.Fatal(app.Listen("0.0.0.0:" + port))
@@ -95,6 +100,28 @@ func getFurniture(c *fiber.Ctx) error {
 	return c.JSON(furniture)
 }
 
+func getFurnitureSingle(c *fiber.Ctx) error {
+		id := c.Params("id")
+	
+		// Convert id to MongoDB ObjectID
+		objectID, err := primitive.ObjectIDFromHex(id)
+		if err != nil {
+			return c.Status(fiber.StatusBadRequest).SendString("Invalid ID format")
+		}
+	
+		// Query MongoDB for the item
+		var furniture Furniture
+		err = collection.FindOne(context.Background(), bson.M{"_id": objectID}).Decode(&furniture)
+		if err != nil {
+			if err == mongo.ErrNoDocuments {
+				return c.Status(fiber.StatusNotFound).SendString("Furniture item not found")
+			}
+			return c.Status(fiber.StatusInternalServerError).SendString("Database error")
+		}
+	
+		// Return the found item
+		return c.JSON(furniture)
+}
 
 func patchFavorite(c *fiber.Ctx) error {
 	id := c.Params("id")
