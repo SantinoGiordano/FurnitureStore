@@ -6,8 +6,8 @@ import Image from "next/image";
 import RatingSystem from "@/componets/ratingSystem";
 
 interface Furniture {
-  __id:string;
-  _id: string;
+  _id:string;
+  id: string;
   name: string;
   description: string;
   price: number;
