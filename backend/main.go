@@ -29,6 +29,19 @@ type Furniture struct {
 
 var collection *mongo.Collection
 
+func CORSMiddleware(c *fiber.Ctx) error {
+	c.Set("Access-Control-Allow-Origin", "http://localhost:3000")
+	c.Set("Access-Control-Allow-Credentials", "true")
+	c.Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+	c.Set("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE")
+
+	// Handle preflight request
+	if c.Method() == "OPTIONS" {
+		return c.SendStatus(fiber.StatusNoContent)
+	}
+
+	return c.Next()
+}
 
 func main() {
 
