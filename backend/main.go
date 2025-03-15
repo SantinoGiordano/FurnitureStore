@@ -137,10 +137,10 @@ func getFurnitureSingle(c *fiber.Ctx) error {
 }
 
 func patchFavorite(c *fiber.Ctx) error {
-	id := c.Params("id")
+	_id := c.Params("_id")
 
 	// ✅ Convert id to ObjectID
-	objectID, err := primitive.ObjectIDFromHex(id)
+	objectID, err := primitive.ObjectIDFromHex(_id)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).SendString("Invalid ID format")
 	}
@@ -165,5 +165,5 @@ func patchFavorite(c *fiber.Ctx) error {
 	}
 
 	// ✅ Return updated response
-	return c.JSON(fiber.Map{"_id": id, "favorite": body.Favorite})
+	return c.JSON(fiber.Map{"_id": _id, "favorite": body.Favorite})
 }
