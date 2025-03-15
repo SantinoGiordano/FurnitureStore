@@ -6,6 +6,7 @@ import Image from "next/image";
 import SearchBar from "@/componets/SearchBar";
 import FavoriteSystem from "@/componets/favoriteSystem";
 import RatingSystem from "@/componets/ratingSystem";
+import Cart from "@/componets/cart";
 
 
 
@@ -56,7 +57,7 @@ export default function Home() {
         <h1 className="text-4xl font-bold text-white">Elegant Living Spaces</h1>
       </div>
     </div>
-
+    <Cart/>
     <div className="p-8">
       <h1 className="text-3xl font-bold text-center mb-6">
         Furniture Collection
