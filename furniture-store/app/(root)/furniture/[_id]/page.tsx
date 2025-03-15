@@ -14,7 +14,7 @@ interface Furniture {
   rating: number;
   inStock: boolean;
   image: string;
-  sale: number;
+  sale?: number;
   favorite: boolean;
 }
 

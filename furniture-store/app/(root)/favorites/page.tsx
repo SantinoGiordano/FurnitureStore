@@ -7,6 +7,7 @@ import RatingSystem from "@/componets/ratingSystem";
 import FavoriteSystem from "@/componets/favoriteSystem";
 
 export interface Furniture {
+  _id:string;
   id: string;
   name: string;
   description: string;
@@ -95,7 +96,8 @@ export default function Home() {
                   View Details
                 </Link>
 
-                <FavoriteSystem key={item.id} item={undefined} />
+                <FavoriteSystem key={item._id} item={item} />
+
               </span>
             </div>
           </div>
