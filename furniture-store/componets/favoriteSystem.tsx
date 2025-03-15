@@ -1,7 +1,10 @@
+'use client'
+
 import React, { useState, useEffect } from "react";
 
 export interface Furniture {
   _id: string; // ✅ Changed id to _id
+  id:string;
   name: string;
   description: string;
   price: number;
