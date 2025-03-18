@@ -63,9 +63,9 @@ export default function SearchBar(){
       {input && (
         <ul className="absolute left-0 right-0 mt-2 bg-white border border-gray-200 shadow-lg rounded-lg overflow-hidden z-50 max-h-60 overflow-y-auto">
           {results.length > 0 ? (
-            results.map((item) => (
+            results.map((item, index) => (
               <li
-                key={item.id}
+                key={index}
                 className="px-4 py-3 text-gray-700 hover:bg-blue-500 hover:text-white cursor-pointer transition-all"
               >
                 <Link href={`/furniture/${item._id}`}>
