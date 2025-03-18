@@ -84,6 +84,7 @@ func main() {
 	app.Get("/api/furniture", getFurniture)
 	app.Get("/api/furniture/:id", getFurnitureSingle)
 	app.Put("/api/furniture/favorited/:id", putFavorite)
+	app.Put("/api/furniture/cart/:id", updateFurnitureInCart)
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -171,10 +172,8 @@ func putFavorite(c *fiber.Ctx) error {
 }
 
 func updateFurnitureInCart(c *fiber.Ctx) error {
-	// Get the item ID from the URL parameters
 	itemID := c.Params("id")
 
-	// Struct to hold the data to update
 	var updatedItem struct {
 		InCart bool `json:"inCart"`
 	}
@@ -190,12 +189,10 @@ func updateFurnitureInCart(c *fiber.Ctx) error {
 	// Build the update object to set the inCart field
 	update := bson.M{"$set": bson.M{"inCart": updatedItem.InCart}}
 
-	// Update the item in MongoDB
 	_, err := collection.UpdateOne(context.Background(), filter, update)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to update the item"})
 	}
 
-	// Return a success response
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"message": "Item updated successfully"})
 }
