@@ -16,7 +16,7 @@ export interface Furniture {
   inCart:boolean;
 }
 
-export default function FurnitureSystem({ item }: { item: Furniture }) {
+export default function CartChecker(item:Furniture) {
   const [inCart, setInCart] = useState(item.inCart);
   const [loading, setLoading] = useState(false);
 
@@ -27,7 +27,7 @@ export default function FurnitureSystem({ item }: { item: Furniture }) {
   const toggleCart = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:8080/api/furniture/favorited/${item._id}`, {
+      const response = await fetch(`http://localhost:8080/api/furniture/cart/${item._id}`, {
         mode: 'cors',
         // credentials: 'include',
         method: "PUT",
