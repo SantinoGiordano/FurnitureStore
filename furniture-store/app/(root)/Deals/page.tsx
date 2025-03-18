@@ -40,8 +40,8 @@ export default function Home() {
   
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {saleItems.map((item) => (
-          <div key={item.id} className="card bg-base-100 shadow-xl p-4">
+        {saleItems.map((item, index) => (
+          <div key={index} className="card bg-base-100 shadow-xl p-4">
             <figure>
               <Image
                 draggable="false"

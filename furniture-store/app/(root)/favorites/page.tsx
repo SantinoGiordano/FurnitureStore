@@ -19,7 +19,7 @@ export interface Furniture {
   favorite: boolean;
 }
 
-export default function Home() {
+export default function Favorite() {
   const [items, setItems] = useState<Furniture[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -54,8 +54,8 @@ export default function Home() {
 
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {favoriteItems.map((item) => (
-          <div key={item.id} className="card bg-base-100 shadow-xl p-4">
+        {favoriteItems.map((item, index) => (
+          <div key={index} className="card bg-base-100 shadow-xl p-4">
             <figure>
               <Image
                 draggable="false"
