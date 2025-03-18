@@ -16,6 +16,7 @@ interface Furniture {
   image: string;
   sale?: number;
   favorite: boolean;
+  inCart:boolean;
 }
 
 export default function FurnitureDetail() {

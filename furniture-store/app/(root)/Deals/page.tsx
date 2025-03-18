@@ -16,6 +16,7 @@ interface Furniture {
   image: string;
   sale?: number;
   favorite: boolean;
+  inCart:boolean;
 }
 
 export default function Home() {
@@ -32,12 +33,14 @@ export default function Home() {
   }, []);
 
   function dealsChecker() {
-    const saleItems = items.filter((item) => item.sale !== undefined && item.sale > 0);
-  
+    const saleItems = items.filter(
+      (item) => item.sale !== undefined && item.sale > 0
+    );
+
     if (saleItems.length === 0) {
       return <p className="text-center text-gray-500">No items on sale.</p>;
     }
-  
+
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {saleItems.map((item, index) => (
@@ -59,7 +62,8 @@ export default function Home() {
             <p className="text-gray-700">{item.description}</p>
             <hr />
             <p className="text-red-500 font-bold">
-              Sale Price: ${(item.sale ? (item.price - item.sale) : item.price).toFixed(2)}
+              Sale Price: $
+              {(item.sale ? item.price - item.sale : item.price).toFixed(2)}
               <span className="text-gray-400 line-through ml-2">
                 ${item.price}
               </span>
@@ -79,7 +83,6 @@ export default function Home() {
       </div>
     );
   }
-  
 
   return (
     <div className="p-8">

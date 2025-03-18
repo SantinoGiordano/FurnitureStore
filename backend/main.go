@@ -25,6 +25,7 @@ type Furniture struct {
 	Image       string             `json:"image"`
 	Sale        int64              `json:"sale"`
 	Favorite    bool               `json:"favorite"`
+	InCart      bool               `json:"inCart"`
 }
 
 var collection *mongo.Collection
@@ -68,16 +69,16 @@ func main() {
 	}
 
 	fmt.Println("Connected to Mongo")
-		
+
 	// Initialize collection
 	collection = client.Database("golang_db").Collection("furniture")
 
 	app := fiber.New()
 	app.Use(cors.New(cors.Config{
-		AllowOrigins:     "*",
-		AllowMethods:     "GET,POST,HEAD,PUT,DELETE,PATCH",
+		AllowOrigins: "*",
+		AllowMethods: "GET,POST,HEAD,PUT,DELETE,PATCH",
 		// AllowCredentials: true,
-		AllowHeaders:     "Content-Type",
+		AllowHeaders: "Content-Type",
 	}))
 
 	app.Get("/api/furniture", getFurniture)
@@ -167,4 +168,34 @@ func putFavorite(c *fiber.Ctx) error {
 
 	// ✅ Return updated response
 	return c.JSON(fiber.Map{"_id": _id, "favorite": body.Favorite})
+}
+
+func updateFurnitureInCart(c *fiber.Ctx) error {
+	// Get the item ID from the URL parameters
+	itemID := c.Params("id")
+
+	// Struct to hold the data to update
+	var updatedItem struct {
+		InCart bool `json:"inCart"`
+	}
+
+	// Parse the JSON body of the request
+	if err := c.BodyParser(&updatedItem); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request body"})
+	}
+
+	// Build the filter to find the item by its ID
+	filter := bson.M{"_id": itemID}
+
+	// Build the update object to set the inCart field
+	update := bson.M{"$set": bson.M{"inCart": updatedItem.InCart}}
+
+	// Update the item in MongoDB
+	_, err := collection.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to update the item"})
+	}
+
+	// Return a success response
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"message": "Item updated successfully"})
 }
