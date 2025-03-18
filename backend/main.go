@@ -172,27 +172,44 @@ func putFavorite(c *fiber.Ctx) error {
 }
 
 func updateFurnitureInCart(c *fiber.Ctx) error {
+	// Extract the item ID from the URL params
 	itemID := c.Params("id")
 
+	// Define the structure for the request body (inCart field)
 	var updatedItem struct {
 		InCart bool `json:"inCart"`
 	}
 
-	// Parse the JSON body of the request
+	// Parse the request body
 	if err := c.BodyParser(&updatedItem); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request body"})
 	}
 
-	// Build the filter to find the item by its ID
-	filter := bson.M{"_id": itemID}
+	// Convert itemID to MongoDB ObjectID
+	objectID, err := primitive.ObjectIDFromHex(itemID)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid item ID"})
+	}
 
-	// Build the update object to set the inCart field
+	// MongoDB filter to find the item by ObjectId
+	filter := bson.M{"_id": objectID}
+
+	// MongoDB update query to set the inCart field
 	update := bson.M{"$set": bson.M{"inCart": updatedItem.InCart}}
 
-	_, err := collection.UpdateOne(context.Background(), filter, update)
+	// Update the item in the database
+	result, err := collection.UpdateOne(context.Background(), filter, update)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to update the item"})
 	}
 
+	// Check if the item exists
+	if result.MatchedCount == 0 {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Item not found"})
+	}
+
+	// Return success message
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"message": "Item updated successfully"})
 }
+
+
