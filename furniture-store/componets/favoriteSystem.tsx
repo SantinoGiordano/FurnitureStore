@@ -28,8 +28,8 @@ export default function FurnitureSystem({ item }: { item: Furniture }) {
     try {
       const response = await fetch(`http://localhost:8080/api/furniture/favorited/${item._id}`, {
         mode: 'cors',
-        credentials: 'include',
-        method: "PATCH",
+        // credentials: 'include',
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
