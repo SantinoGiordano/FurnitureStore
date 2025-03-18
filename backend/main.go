@@ -30,10 +30,10 @@ type Furniture struct {
 var collection *mongo.Collection
 
 func CORSMiddleware(c *fiber.Ctx) error {
-	c.Set("Access-Control-Allow-Origin", "http://localhost:3000")
-	c.Set("Access-Control-Allow-Credentials", "true")
+	c.Set("Access-Control-Allow-Origin", "*")
+	// c.Set("Access-Control-Allow-Credentials", "true")
 	c.Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
-	c.Set("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE")
+	c.Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
 
 	// Handle preflight request
 	if c.Method() == "OPTIONS" {
@@ -68,20 +68,21 @@ func main() {
 	}
 
 	fmt.Println("Connected to Mongo")
-
+		
 	// Initialize collection
 	collection = client.Database("golang_db").Collection("furniture")
 
 	app := fiber.New()
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "*",
-		AllowMethods: "GET,POST,PATCH,DELETE",
-		AllowHeaders: "Content-Type",
+		AllowOrigins:     "*",
+		AllowMethods:     "GET,POST,HEAD,PUT,DELETE,PATCH",
+		// AllowCredentials: true,
+		AllowHeaders:     "Content-Type",
 	}))
 
 	app.Get("/api/furniture", getFurniture)
 	app.Get("/api/furniture/:id", getFurnitureSingle)
-	app.Patch("/api/furniture/favorited/:id", patchFavorite)
+	app.Put("/api/furniture/favorited/:id", putFavorite)
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -114,30 +115,30 @@ func getFurniture(c *fiber.Ctx) error {
 }
 
 func getFurnitureSingle(c *fiber.Ctx) error {
-		id := c.Params("id")
-	
-		// Convert id to MongoDB ObjectID
-		objectID, err := primitive.ObjectIDFromHex(id)
-		if err != nil {
-			return c.Status(fiber.StatusBadRequest).SendString("Invalid ID format")
+	id := c.Params("id")
+
+	// Convert id to MongoDB ObjectID
+	objectID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).SendString("Invalid ID format")
+	}
+
+	// Query MongoDB for the item
+	var furniture Furniture
+	err = collection.FindOne(context.Background(), bson.M{"_id": objectID}).Decode(&furniture)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return c.Status(fiber.StatusNotFound).SendString("Furniture item not found")
 		}
-	
-		// Query MongoDB for the item
-		var furniture Furniture
-		err = collection.FindOne(context.Background(), bson.M{"_id": objectID}).Decode(&furniture)
-		if err != nil {
-			if err == mongo.ErrNoDocuments {
-				return c.Status(fiber.StatusNotFound).SendString("Furniture item not found")
-			}
-			return c.Status(fiber.StatusInternalServerError).SendString("Database error")
-		}
-	
-		// Return the found item
-		return c.JSON(furniture)
+		return c.Status(fiber.StatusInternalServerError).SendString("Database error")
+	}
+
+	// Return the found item
+	return c.JSON(furniture)
 }
 
-func patchFavorite(c *fiber.Ctx) error {
-	_id := c.Params("_id")
+func putFavorite(c *fiber.Ctx) error {
+	_id := c.Params("id")
 
 	// ✅ Convert id to ObjectID
 	objectID, err := primitive.ObjectIDFromHex(_id)
