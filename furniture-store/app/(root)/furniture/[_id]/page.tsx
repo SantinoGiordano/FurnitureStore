@@ -44,7 +44,6 @@ export default function FurnitureDetail() {
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-      {item && <CartChecker item={item} />}
       <Image
         draggable="false"
         src={item.image}
@@ -64,6 +63,7 @@ export default function FurnitureDetail() {
         {item.inStock ? "In Stock" : "Out of Stock"}
         <div className="text-xl font-semibold mt-4">
           <RatingSystem rating={item.rating} />
+          {item && <CartChecker item={item} />}
         </div>
       </span>
     </div>
