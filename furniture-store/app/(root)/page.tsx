@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -6,7 +6,7 @@ import Image from "next/image";
 import SearchBar from "@/componets/SearchBar";
 import FavoriteSystem from "@/componets/favoriteSystem";
 import RatingSystem from "@/componets/ratingSystem";
-import CartChecker from "@/componets/cartChecker";
+import CartChecker from "@/componets/CartChecker";
 
 
 interface Furniture {
@@ -74,7 +74,7 @@ export default function Home() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {items.map((item) => (
             <div key={item._id} className="card bg-base-100 shadow-xl p-4">
-              <CartChecker key={item.id} inCart={item.inCart}/>
+              {item && <CartChecker item={item} />}
               <figure>
                 <Image 
                   draggable = 'false'
