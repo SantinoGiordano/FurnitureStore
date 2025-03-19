@@ -5,7 +5,6 @@ export default function NavBar() {
     <nav className="bg-gray-800 p-4 shadow-md">
       <div className="container mx-auto flex justify-between items-center">
         <div className="text-white text-xl font-semibold">
-          {/* You can add your logo or brand name here */}
           Fantastic Furniture
         </div>
         <ul className="m-5 flex space-x-6">
@@ -22,6 +21,11 @@ export default function NavBar() {
           <li>
             <Link href="/favorites" className="text-white hover:text-indigo-500 transition-all duration-300">
               Favorites
+            </Link>
+          </li>
+          <li>
+            <Link href="/cart" className="text-white hover:text-indigo-500 transition-all duration-300">
+              Cart
             </Link>
           </li>
           <li>
