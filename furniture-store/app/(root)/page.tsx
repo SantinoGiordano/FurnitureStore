@@ -49,7 +49,7 @@ export default function Home() {
 
     <div className="p-8">
     <div
-      className="w-full h-64 bg-fixed bg-cover bg-center relative"
+      className="w-full h-80 bg-fixed bg-cover bg-center relative"
       style={{
         backgroundImage: `url('livingRoom.webp')`, 
       }}
