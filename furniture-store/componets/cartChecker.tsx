@@ -51,7 +51,7 @@ export default function CartChecker({ item }: { item: Furniture }) {
   };
 
   return (
-    <div className="flex justify-end">
+    <div className="flex justify-end pb-2 pt-2">
       <div
         className={`cursor-pointer px-4 py-2 rounded ${
           inCart ? "bg-red-500 text-white" : "bg-green-500 text-white"
