@@ -18,7 +18,6 @@ export interface Furniture {
 
 export default function CartChecker({ item }: { item: Furniture }) {
   const [inCart, setInCart] = useState(item.inCart);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -26,7 +25,6 @@ export default function CartChecker({ item }: { item: Furniture }) {
   }, [item.inCart]);
 
   const toggleCart = async () => {
-    setLoading(true);
     setError(null);
     try {
       const response = await fetch(`http://localhost:8080/api/furniture/cart/${item._id}`, {
@@ -36,36 +34,34 @@ export default function CartChecker({ item }: { item: Furniture }) {
         },
         body: JSON.stringify({ inCart: !inCart }),
       });
-  
+
       console.log("Response status:", response.status); // Log the status code
       console.log("Response body:", await response.json()); // Log the response body
-  
+
       if (!response.ok) {
         throw new Error("Failed to update inCart status.");
       }
-  
-      setInCart((prev) => !prev); // Update UI
+
+      // Update UI directly after the request is successful
+      setInCart((prev) => !prev); // Toggle the inCart state based on the current value
     } catch (error) {
       console.error("Error updating inCart status:", error);
       setError("Failed to update cart. Please try again.");
-    } finally {
-      setLoading(false);
     }
   };
 
   return (
     <div className="flex justify-end">
       <div
-        className={`hover:cursor-pointer ${loading ? "opacity-50" : ""} 
-          ${inCart ? "bg-red-500 text-white" : "bg-green-500 text-white"} 
-          px-4 py-2 rounded`}
-        onClick={!loading ? toggleCart : undefined}
+        className={`cursor-pointer px-4 py-2 rounded ${
+          inCart ? "bg-red-500 text-white" : "bg-green-500 text-white"
+        }`}
+        onClick={toggleCart} // Always trigger toggleCart onClick
       >
         {inCart ? "Remove" : "Add"}
       </div>
-      {loading && <span>Loading...</span>}
-      {error && <div className="text-red-500">{error}</div>}
+
+      {error && <div className="text-red-500 mt-2">{error}</div>}
     </div>
   );
-  
 }
