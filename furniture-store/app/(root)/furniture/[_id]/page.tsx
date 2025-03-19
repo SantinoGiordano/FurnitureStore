@@ -4,9 +4,10 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import RatingSystem from "@/componets/ratingSystem";
+import CartChecker from "@/componets/CartChecker";
 
 interface Furniture {
-  _id:string;
+  _id: string;
   id: string;
   name: string;
   description: string;
@@ -16,7 +17,7 @@ interface Furniture {
   image: string;
   sale?: number;
   favorite: boolean;
-  inCart:boolean;
+  inCart: boolean;
 }
 
 export default function FurnitureDetail() {
@@ -25,7 +26,9 @@ export default function FurnitureDetail() {
 
   useEffect(() => {
     async function fetchFurnitureItem() {
-      const response = await fetch(`http://localhost:8080/api/furniture/${_id}`);
+      const response = await fetch(
+        `http://localhost:8080/api/furniture/${_id}`
+      );
       const data = await response.json();
       setItem(data);
     }
@@ -41,6 +44,7 @@ export default function FurnitureDetail() {
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+      {item && <CartChecker item={item} />}
       <Image
         draggable="false"
         src={item.image}
@@ -59,7 +63,7 @@ export default function FurnitureDetail() {
       >
         {item.inStock ? "In Stock" : "Out of Stock"}
         <div className="text-xl font-semibold mt-4">
-        <RatingSystem rating={item.rating} />
+          <RatingSystem rating={item.rating} />
         </div>
       </span>
     </div>
