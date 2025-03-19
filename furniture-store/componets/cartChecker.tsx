@@ -54,9 +54,11 @@ export default function CartChecker({ item }: { item: Furniture }) {
   };
 
   return (
-    <div>
+    <div className="flex justify-end">
       <div
-        className={`hover:cursor-pointer ${loading ? "opacity-50" : ""}`}
+        className={`hover:cursor-pointer ${loading ? "opacity-50" : ""} 
+          ${inCart ? "bg-red-500 text-white" : "bg-green-500 text-white"} 
+          px-4 py-2 rounded`}
         onClick={!loading ? toggleCart : undefined}
       >
         {inCart ? "Remove" : "Add"}
@@ -65,4 +67,5 @@ export default function CartChecker({ item }: { item: Furniture }) {
       {error && <div className="text-red-500">{error}</div>}
     </div>
   );
+  
 }
