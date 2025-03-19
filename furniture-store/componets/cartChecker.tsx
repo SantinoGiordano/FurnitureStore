@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from "react";
 
 export interface Furniture {
-  _id: string; // ✅ Changed id to _id
-  id:string;
+  _id: string;
+  id: string;
   name: string;
   description: string;
   price: number;
@@ -13,35 +13,41 @@ export interface Furniture {
   image: string;
   sale?: number;
   favorite: boolean;
-  inCart:boolean;
+  inCart: boolean;
 }
 
-export default function CartChecker(item:Furniture) {
+export default function CartChecker({ item }: { item: Furniture }) {
   const [inCart, setInCart] = useState(item.inCart);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setInCart(item.inCart); // ✅ Sync with backend changes
+    setInCart(item.inCart);
   }, [item.inCart]);
 
   const toggleCart = async () => {
     setLoading(true);
+    setError(null);
     try {
       const response = await fetch(`http://localhost:8080/api/furniture/cart/${item._id}`, {
-        mode: 'cors',
-        // credentials: 'include',
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ inCart: !inCart }), // ✅ Send new favorite value
+        body: JSON.stringify({ inCart: !inCart }),
       });
-
-      if (!response.ok) throw new Error("Failed to update favorite status.");
-
-      setInCart((prev) => !prev); // ✅ Update UI
+  
+      console.log("Response status:", response.status); // Log the status code
+      console.log("Response body:", await response.json()); // Log the response body
+  
+      if (!response.ok) {
+        throw new Error("Failed to update inCart status.");
+      }
+  
+      setInCart((prev) => !prev); // Update UI
     } catch (error) {
-      console.error("Error updating favorite status:", error);
+      console.error("Error updating inCart status:", error);
+      setError("Failed to update cart. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -49,9 +55,14 @@ export default function CartChecker(item:Furniture) {
 
   return (
     <div>
-      <div className={`hover:cursor-pointer ${loading ? "opacity-50" : ""}`} onClick={!loading ? toggleCart : undefined}>
-        {inCart ? "Add" : "Remove"}
+      <div
+        className={`hover:cursor-pointer ${loading ? "opacity-50" : ""}`}
+        onClick={!loading ? toggleCart : undefined}
+      >
+        {inCart ? "Remove" : "Add"}
       </div>
+      {loading && <span>Loading...</span>}
+      {error && <div className="text-red-500">{error}</div>}
     </div>
   );
 }
