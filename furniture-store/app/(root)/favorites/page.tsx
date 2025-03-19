@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import RatingSystem from "@/componets/ratingSystem";
 import FavoriteSystem from "@/componets/favoriteSystem";
+import CartChecker from "@/componets/CartChecker";
 
 export interface Furniture {
   _id:string;
@@ -57,6 +58,7 @@ export default function Favorite() {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {favoriteItems.map((item, index) => (
           <div key={index} className="card bg-base-100 shadow-xl p-4">
+            {item && <CartChecker item={item} />}
             <figure>
               <Image
                 draggable="false"

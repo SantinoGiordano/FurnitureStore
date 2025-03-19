@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import RatingSystem from "@/componets/ratingSystem";
+import CartChecker from "@/componets/CartChecker";
 
 interface Furniture {
   _id: string;
@@ -45,6 +46,7 @@ export default function Home() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {saleItems.map((item, index) => (
           <div key={index} className="card bg-base-100 shadow-xl p-4">
+            {item && <CartChecker item={item} />}
             <figure>
               <Image
                 draggable="false"
