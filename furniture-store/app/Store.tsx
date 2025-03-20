@@ -1,18 +1,18 @@
 import { create } from "Zustand";
 
-type CounterStore = {
-  count: number;
-  increment: ()=> void
-  decrement: ()=> void
+type FavoriteStore = {
+  favorited: boolean;
+  toggleTrue: ()=> void
+  toggleFalse: ()=> void
 };
 
-export const useCounterStore = create<CounterStore>((set) => ({
-  count: 0,
-  increment: () => {
-    set({count: 1})
+export const useFavoritedStore = create<FavoriteStore>((set) => ({
+    favorited: false,
+  toggleTrue: () => {
+    set({favorited: true})
   },
-  decrement: () => {
-    set({count: -1})
+  toggleFalse: () => {
+    set({favorited: false})
   },
 
 }));
