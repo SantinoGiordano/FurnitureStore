@@ -1,10 +1,10 @@
-'use client'
+"use client";
 
 import { useFavoritedStore } from "@/app/Store";
 
 export interface Furniture {
-  _id: string; // ✅ Changed id to _id
-  id:string;
+  _id: string;
+  id: string;
   name: string;
   description: string;
   price: number;
@@ -14,20 +14,24 @@ export interface Furniture {
   sale?: number;
 }
 
-export default function FurnitureSystem() {
+export default function FavoriteSystem() {
+  const favorited = useFavoritedStore((state) => state.favorited);
+  const toggleTrue = useFavoritedStore((state) => state.toggleTrue);
+  const toggleFalse = useFavoritedStore((state) => state.toggleFalse);
 
-  const favorited = useFavoritedStore((state) => state.favorited)
-  const toggleFalse = useFavoritedStore((state) => state.favorited)
-  const toggleTrue = useFavoritedStore((state) => state.favorited)
+
+  const handleToggleFavorite = () => {
+    if (favorited) {
+      toggleFalse();
+    } else {
+      toggleTrue();
+    }
+  };
+
   return (
-    <>
-    <div>
-      {favorited}
-      <button onClick={toggleTrue}>Favorite</button>
-      <button onClick={toggleFalse}>Unfavorite</button>
-    </div>
-    </>
+    <button onClick={handleToggleFavorite}>
+      {favorited ? "❤️" : "🤍"}
+    </button>
   );
 }
-
-// {favorite ? "❤️" : "🤍"}
+ 
