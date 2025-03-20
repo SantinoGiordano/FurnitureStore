@@ -44,7 +44,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="p-8">
+    <div className="p-8 bg-white-100">
       <div
         className="w-full h-80 bg-fixed bg-cover bg-center relative"
         style={{
