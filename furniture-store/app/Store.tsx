@@ -1,18 +1,18 @@
-import { create } from "Zustand";
+// Store.ts
+import { create } from "zustand";
 
 type FavoriteStore = {
-  favorited: boolean;
-  toggleTrue: ()=> void
-  toggleFalse: ()=> void
+  favorites: Record<string, boolean>;
+  toggleFavorite: (id: string) => void;
 };
 
 export const useFavoritedStore = create<FavoriteStore>((set) => ({
-    favorited: false,
-  toggleTrue: () => {
-    set({favorited: true})
-  },
-  toggleFalse: () => {
-    set({favorited: false})
-  },
-
+  favorites: {},
+  toggleFavorite: (id) =>
+    set((state) => ({
+      favorites: {
+        ...state.favorites,
+        [id]: !state.favorites[id],
+      },
+    })),
 }));
