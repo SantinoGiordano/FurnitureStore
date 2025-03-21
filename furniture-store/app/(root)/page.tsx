@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useFavoritedStore } from "@/app/Store";
 import RatingSystem from "@/componets/ratingSystem";
 import SearchBar from "@/componets/SearchBar";
-import CartChecker from "@/componets/CartChecker";
+
 
 export interface Furniture {
   _id: string;
@@ -66,6 +66,7 @@ export default function FurnitureSystem() {
 }
 
 function FurnitureItem({ item }: { item: Furniture }) {
+  
   const favorites = useFavoritedStore((state) => state.favorites);
   const toggleFavorite = useFavoritedStore((state) => state.toggleFavorite);
 
@@ -103,7 +104,7 @@ function FurnitureItem({ item }: { item: Furniture }) {
           >
           {isFavorited ? "❤️" : "🤍"}
         </button>
-        <CartChecker item={item} />
+        {/* <CartChecker item={item._id} /> */}
           </span>
       </div>
     </div>
