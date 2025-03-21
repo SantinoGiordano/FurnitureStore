@@ -1,30 +1,27 @@
+// FavoritesPage.tsx
 "use client";
 
-import Link from "next/link";
-import { useState, useEffect } from "react";
-import Image from "next/image";
-import RatingSystem from "@/componets/ratingSystem";
-import FavoriteSystem from "@/componets/favoriteSystem";
+import { useEffect, useState } from "react";
+import { useFavoritedStore } from "@/app/Store";
 import CartChecker from "@/componets/CartChecker";
 
 export interface Furniture {
-  _id:string;
-  id: string;
+  _id: string;
   name: string;
   description: string;
   price: number;
   rating: number;
   inStock: boolean;
   image: string;
-  sale?: number; // Optional sale price
-  favorite: boolean;
-  inCart:boolean;
+  sale?: number;
 }
 
-export default function Favorite() {
+export default function FavoritesPage() {
   const [items, setItems] = useState<Furniture[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const favorites = useFavoritedStore((state) => state.favorites);
+  const toggleFavorite = useFavoritedStore((state) => state.toggleFavorite);
 
   useEffect(() => {
     async function fetchFurniture() {
@@ -43,81 +40,58 @@ export default function Favorite() {
     fetchFurniture();
   }, []);
 
-  function renderFavoriteItems() {
-    const favoriteItems = items.filter((item) => item.favorite);
+  if (loading) return <p>Loading furniture...</p>;
+  if (error) return <p className="text-red-500">{error}</p>;
 
-    if (favoriteItems.length === 0) {
-      return (
-        <p className="text-center text-gray-500">
-          You have not favorited anything.
-        </p>
-      );
-    }
-
-    return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {favoriteItems.map((item, index) => (
-          <div key={index} className="card bg-base-100 shadow-xl p-4">
-            {item && <CartChecker item={item} />}
-            <figure>
-              <Image
-                draggable="false"
-                src={item.image}
-                alt={item.name}
-                width={600}
-                height={400}
-                className="w-full h-40 object-cover rounded"
-              />
-            </figure>
-            <div className="card-body">
-              <span className="flex justify-between items-center mt-2">
-                <h2 className="card-title">{item.name}</h2>
-                <RatingSystem key={item.id} rating={item.rating} />
-              </span>
-              <p className="text-sm text-gray-500">{item.description}</p>
-              <hr />
-              <hr />
-              <hr />
-              <div className="flex justify-between items-center mt-2">
-                <span className="text-lg font-semibold">
-                  ${item.price.toFixed(2)}
-                </span>
-                <span
-                  className={`text-sm font-semibold ${
-                    item.inStock ? "text-green-600" : "text-red-600"
-                  }`}
-                >
-                  {item.inStock ? "In Stock" : "Out of Stock"}
-                </span>
-              </div>
-              <hr />
-              <span className="flex justify-between items-center mt-2">
-                <Link
-                  className="btn btn-primary w-full mt-4"
-                  href={`/furniture/${item._id}`}
-                >
-                  View Details
-                </Link>
-
-                <FavoriteSystem key={item._id} item={item} />
-
-              </span>
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  }
-
-  if (loading) return <p className="text-center">Loading furniture...</p>;
-  if (error) return <p className="text-center text-red-500">{error}</p>;
+  const isFavorited = items.filter((item) => favorites[item._id]);
 
   return (
     <div className="p-8">
-      <h1 className="text-3xl font-bold text-center mb-6">
-        Furniture Collection
-      </h1>
-      {renderFavoriteItems()}
+      <h1 className="text-3xl font-bold text-center mb-6">Favorites</h1>
+      {isFavorited.length === 0 ? (
+        <p className="text-center text-gray-500">
+          You have not favorited anything.
+        </p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {isFavorited.map((item) => (
+            <div key={item._id} className="card bg-base-100 shadow-xl p-4">
+              <figure>
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="w-full h-40 object-cover rounded"
+                />
+              </figure>
+              <div className="card-body">
+                <h2 className="card-title">{item.name}</h2>
+                <p className="text-sm text-gray-500">{item.description}</p>
+                <div className="flex justify-between items-center mt-2">
+                  <span className="text-lg font-semibold">
+                    ${item.price.toFixed(2)}
+                  </span>
+                  <span
+                    className={`text-sm font-semibold ${
+                      item.inStock ? "text-green-600" : "text-red-600"
+                    }`}
+                  >
+                    {item.inStock ? "In Stock" : "Out of Stock"}
+                  </span>
+                </div>
+                <span className="flex justify-between items-center w-full">
+                  <button
+                    onClick={() => toggleFavorite(item._id)}
+                    className="p-2 bg-red-500 text-white rounded hover:cursor-pointer"
+                  >
+                    {isFavorited ? "Unfavorite" : "🤍"}
+                  </button>
+                  <CartChecker item={item._id} />
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
